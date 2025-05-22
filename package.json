@@ -23,6 +23,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.2",
     "eslint": "^9.27.0",
+    "eslint-plugin-format": "^1.0.1",
     "typescript": "^5.8.3"
   }
 }

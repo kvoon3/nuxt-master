@@ -5,9 +5,12 @@ import nuxt from './.nuxt/eslint.config.mjs'
 
 export default antfu({
   vue: true,
+  formatters: true,
 })
-  .append(nuxt({
-    rules: {
-      'nuxt/nuxt-config-keys-order': 'error',
-    },
-  }))
+  .append(
+    await nuxt({
+      rules: {
+        'nuxt/nuxt-config-keys-order': 'error',
+      },
+    }),
+  )
