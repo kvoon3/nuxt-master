@@ -47,5 +47,18 @@
     "scss",
     "pcss",
     "postcss"
+  ],
+
+  // Use TailwindCSS instead of UnoCSS
+  "unocss.disable": true,
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.classAttributes": ["class", "ui"],
+  "tailwindCSS.experimental.classRegex": [
+    ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ]
 }
