@@ -57,6 +57,8 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.colorDecorators": true,
   "tailwindCSS.classAttributes": ["class", "ui"],
   "tailwindCSS.experimental.classRegex": [
     ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
