@@ -6,3 +6,11 @@ body,
 #__nuxt {
   height: 100%;
 }
+
+@utility position-x-center {
+  @apply left-1/2 -translate-x-1/2;
+}
+
+@utility position-y-center {
+  @apply top-1/2 -translate-y-1/2;
+}

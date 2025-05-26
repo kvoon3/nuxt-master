@@ -1,122 +1,40 @@
 <script setup lang="ts">
-interface Chat {
-  id: string
-  name: string
-  messages: ChatMessage[]
-}
+const { chat, send } = useChat()
 
-interface ChatMessage {
-  id: string
-  role: 'user' | 'assistant'
-  text: string
-}
-
-const chat: Chat = {
-  id: '1',
-  name: 'Conversation Example',
-  messages: [
+useHead({
+  title: chat.value.name,
+  htmlAttrs: {
+    class: 'html-chat-classes',
+  },
+  script: [
     {
-      id: '1',
-      role: 'user',
-      text: 'Hi, how are you today?',
-    },
-    {
-      id: '2',
-      role: 'assistant',
-      text: 'I am fine, thanks! How about yourself?',
-    },
-    {
-      id: '3',
-      role: 'user',
-      text: 'I\'m doing pretty well. The weather is nice today, isn\'t it?',
-    },
-    {
-      id: '4',
-      role: 'assistant',
-      text: 'Yes, it\'s beautiful outside! Are you planning to enjoy the weather? Maybe go for a walk?',
-    },
-    {
-      id: '5',
-      role: 'user',
-      text: 'That\'s a good idea. I was thinking about going to the park later. Do you have any recommendations for things to do there?',
-    },
-    {
-      id: '6',
-      role: 'assistant',
-      text: 'Central Park has some lovely walking trails. You could bring a book, have a picnic, or just people-watch. There\'s also bike rentals if you want to explore more area.',
-    },
-    {
-      id: '7',
-      role: 'user',
-      text: 'A picnic sounds nice! What should I bring for a simple picnic?',
-    },
-    {
-      id: '8',
-      role: 'assistant',
-      text: 'For a simple picnic, I\'d recommend sandwiches, some fresh fruit, maybe cheese and crackers, and don\'t forget drinks! A blanket to sit on would be good too.',
-    },
-    {
-      id: '9',
-      role: 'user',
-      text: 'Great suggestions! By the way, what\'s your favorite type of sandwich?',
-    },
-    {
-      id: '10',
-      role: 'assistant',
-      text: 'I\'m partial to a classic BLT with avocado added. The crunch of the bacon with the creaminess of avocado is perfect! What about you?',
-    },
-    {
-      id: '11',
-      role: 'user',
-      text: 'I love a good turkey club. Speaking of food, do you know any good recipes for homemade lemonade?',
-    },
-    {
-      id: '12',
-      role: 'assistant',
-      text: 'Absolutely! For fresh lemonade: squeeze 6 lemons (about 1 cup juice), mix with 1 cup sugar (adjust to taste) and 4 cups cold water. Add mint or berries for extra flavor!',
-    },
-    {
-      id: '13',
-      role: 'user',
-      text: 'That sounds refreshing! Changing topics - have you read any good books lately?',
-    },
-    {
-      id: '14',
-      role: 'assistant',
-      text: 'I recently enjoyed \'Project Hail Mary\' by Andy Weir - great sci-fi with humor. For non-fiction, \'Atomic Habits\' is fantastic for productivity tips. Any recommendations from your side?',
-    },
-    {
-      id: '15',
-      role: 'user',
-      text: 'I\'m currently reading \'The Midnight Library\' - really makes you think about life choices. Say, what do you think about audiobooks versus physical books?',
-    },
-    {
-      id: '16',
-      role: 'assistant',
-      text: 'Both have merits! Audiobooks are great for multitasking (driving, chores), while physical books offer that tactile experience. I often switch between both depending on my mood and activity.',
-    },
-    {
-      id: '17',
-      role: 'user',
-      text: 'Makes sense. By the way, I need to buy a birthday present for my niece. Any ideas for a 10-year-old?',
-    },
-    {
-      id: '18',
-      role: 'assistant',
-      text: 'Popular options: craft kits, STEM toys, books in her favorite genre, or experience gifts like a zoo membership. Does she have particular interests?',
-    },
-    {
-      id: '19',
-      role: 'user',
-      text: 'She loves animals and science. Maybe a science kit with animals?',
-    },
-    {
-      id: '20',
-      role: 'assistant',
-      text: 'Perfect! There are great kits like ant farms, butterfly gardens, or microscope sets with prepared animal slides. Pair it with a kids\' wildlife book for extra impact!',
+      // NOTES: disabled when use `useHeadSafe`
+      innerHTML: 'var test = "header"',
     },
   ],
+})
+
+const scrollContainer = useTemplateRef<HTMLElement>('container')
+const { scrollToBottom, isAtBottom } = useScrollArea(scrollContainer)
+
+const text = shallowRef('')
+
+function sendMessage() {
+  if (!text.value.trim())
+    return
+
+  send(text.value)
+
+  text.value = ''
 }
+
+watch(
+  () => chat.value.messages.length,
+  (newVal, oldVal) => {
+    if (newVal > oldVal)
+      scrollToBottom({ smooth: false })
+  },
+)
 </script>
 
 <template>
@@ -124,16 +42,16 @@ const chat: Chat = {
     <div class="leading-loose text-2xl bg-accented font-semibold text-center align-middle">
       {{ chat.name }}
     </div>
-    <div class="overflow-y-auto flex flex-col p-4">
-      <div
+    <div ref="container" class="overflow-y-auto flex flex-col p-4 relative">
+      <p
         v-for="msg in chat.messages" :key="msg.id"
-        class="flex my-4"
+        class="flex my-4 "
         :class="{
           'justify-end': msg.role === 'user',
         }"
       >
         <span
-          class="inline-block p-2 rounded-md"
+          class="inline-block p-2 rounded-md "
 
           :class="{
             'bg-muted max-w-2/3': msg.role === 'user',
@@ -141,7 +59,36 @@ const chat: Chat = {
         >
           {{ msg.text }}
         </span>
-      </div>
+      </p>
+      <UTextarea
+        v-model="text"
+        size="xl"
+        autofocus
+        autoresize
+        :rows="1"
+        :maxrows="6"
+        placeholder="Typing text..."
+        class="sticky bottom-0 w-full lg:w-2/3 mx-auto"
+        @keydown.ctrl.enter="sendMessage"
+      >
+        <button
+          v-if="!isAtBottom"
+          class="absolute -top-10 position-x-center"
+          @click="() => scrollToBottom({ smooth: false })"
+        >
+          <UIcon
+            name="ph:arrow-circle-down-duotone"
+            class="p-4 bg-white opacity-50 hover:opacity-75  rounded-full"
+          />
+        </button>
+        <button class="absolute right-4 position-y-center flex items-center justify-center">
+          <UIcon
+            name="ph:key-return-fill"
+            class="p-4 bg-white opacity-50 hover:opacity-75 rounded-full"
+            @click="sendMessage"
+          />
+        </button>
+      </UTextarea>
     </div>
   </div>
 </template>
