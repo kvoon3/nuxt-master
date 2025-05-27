@@ -42,7 +42,7 @@ watch(
     <div class="leading-loose text-2xl bg-accented font-semibold text-center align-middle">
       {{ chat.name }}
     </div>
-    <div ref="container" class="overflow-y-auto flex flex-col p-4 relative">
+    <div ref="container" class="overflow-y-auto overflow-x-hidden flex flex-col p-4 relative">
       <p
         v-for="msg in chat.messages" :key="msg.id"
         class="flex my-4 "
@@ -65,10 +65,10 @@ watch(
         size="xl"
         autofocus
         autoresize
-        :rows="1"
+        :rows="2"
         :maxrows="6"
         placeholder="Typing text..."
-        class="sticky bottom-0 w-full lg:w-2/3 mx-auto"
+        class="backdrop-blur sticky bottom-0 w-full lg:w-2/3 mx-auto"
         @keydown.ctrl.enter="sendMessage"
       >
         <button
@@ -78,13 +78,14 @@ watch(
         >
           <UIcon
             name="ph:arrow-circle-down-duotone"
-            class="p-4 bg-white opacity-50 hover:opacity-75  rounded-full"
+            class="p-4 bg-neutral-400 opacity-50 hover:opacity-75  rounded-full"
           />
         </button>
         <button class="absolute right-4 position-y-center flex items-center justify-center">
           <UIcon
             name="ph:key-return-fill"
-            class="p-4 bg-white opacity-50 hover:opacity-75 rounded-full"
+            :class="!!text ? 'opacity-50' : 'opacity-20'"
+            class="p-4 bg-neutral-400 hover:opacity-75 rounded-full"
             @click="sendMessage"
           />
         </button>

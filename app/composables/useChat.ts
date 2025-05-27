@@ -24,7 +24,7 @@ export function useChat() {
       chat.value.messages.push({
         id: genNextId(),
         role: 'assistant',
-        text: `you said${text}`,
+        text: `you said: ${text}`,
       })
     }, 500)
   }
