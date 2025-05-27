@@ -1,8 +1,10 @@
 <script setup lang="ts">
 const { chat, send } = useChat()
 
+const { title } = useAppConfig()
+
 useHead({
-  title: chat.value.name,
+  title: `${chat.value.name} - ${title}`,
   htmlAttrs: {
     class: 'html-chat-classes',
   },
