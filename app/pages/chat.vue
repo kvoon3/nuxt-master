@@ -46,7 +46,7 @@ watch(
     </div>
     <div ref="container" class="overflow-y-auto overflow-x-hidden flex flex-col p-4 relative">
       <p
-        v-for="msg in chat.messages" :key="msg.id"
+        v-for="msg, key in chat.messages" :key
         class="flex my-4 "
         :class="{
           'justify-end': msg.role === 'user',
@@ -59,7 +59,7 @@ watch(
             'bg-muted max-w-2/3': msg.role === 'user',
           }"
         >
-          {{ msg.text }}
+          {{ msg.content }}
         </span>
       </p>
       <UTextarea

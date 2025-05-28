@@ -1,31 +1,34 @@
-import type { Chat, ChatMessage } from '~/types'
+import type { Chat } from '~/types'
 import { ref as deepRef } from 'vue'
-import { defaultChatMessages } from '~/shared/constants'
 
 export function useChat() {
   const chat = deepRef<Chat>({
     id: '1',
     name: 'Conversation Example',
-    messages: defaultChatMessages,
+    messages: [],
   })
 
-  const genNextId = () => {
-    return `${Number(chat.value.messages.at(-1)?.id) + 1}`
-  }
-
-  const send = async (text: string) => {
+  const send = async (content: string) => {
     chat.value.messages.push({
-      id: genNextId(),
       role: 'user',
-      text,
+      content,
     })
 
-    const data = await $fetch<ChatMessage>('/api/ai', {
-      method: 'post',
-      body: chat.value,
-    })
-
-    chat.value.messages.push(data)
+    try {
+      const text = await $fetch('/api/ai', {
+        method: 'post',
+        body: chat.value,
+      })
+      if (text) {
+        chat.value.messages.push({
+          role: 'assistant',
+          content: text,
+        })
+      }
+    }
+    catch (error) {
+      console.error('error', error)
+    }
   }
 
   return {
