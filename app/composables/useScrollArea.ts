@@ -1,7 +1,7 @@
 import type { ShallowRef } from 'vue'
 
 export function useScrollArea(container: ShallowRef<HTMLElement | null>) {
-  const isAtBottom = shallowRef(false)
+  const isAtBottom = shallowRef(true)
 
   const checkPosition = () => {
     if (!container.value)

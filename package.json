@@ -18,6 +18,7 @@
     "@xsai-ext/providers-local": "0.3.0-beta.3",
     "@xsai/generate-text": "0.3.0-beta.3",
     "eslint": "^9.27.0",
+    "markdown-it": "^14.1.0",
     "nuxt": "^3.17.4",
     "vue": "^3.5.14",
     "vue-router": "^4.5.1"
@@ -25,6 +26,8 @@
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.2",
     "@nuxt/ui": "latest",
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/markdown-it": "^14.1.2",
     "eslint": "^9.27.0",
     "eslint-plugin-format": "^1.0.1",
     "lint-staged": "^15.5.2",

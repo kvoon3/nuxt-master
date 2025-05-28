@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import markdownIt from 'markdown-it'
+
+const md = markdownIt()
+
 const { chat, send } = useChat()
 
 const { title } = useAppConfig()
@@ -37,6 +41,14 @@ watch(
       scrollToBottom({ smooth: false })
   },
 )
+
+const thinkTagRE = /<think>([\s\S]*?)<\/think>/g
+function renderContent(content: string) {
+  // TODO: render <think> block
+  content = content.replace(thinkTagRE, '')
+
+  return md.render(content.trim())
+}
 </script>
 
 <template>
@@ -53,15 +65,14 @@ watch(
         }"
       >
         <span
-          class="inline-block p-2 rounded-md "
-
+          class="inline-block p-2 rounded-md prose dark:prose-invert"
           :class="{
             'bg-muted max-w-2/3': msg.role === 'user',
           }"
-        >
-          {{ msg.content }}
-        </span>
+          v-html="renderContent(typeof msg.content === 'string' ? msg.content : '')"
+        />
       </p>
+      <div class="flex-1" />
       <UTextarea
         v-model="text"
         size="xl"
@@ -70,7 +81,7 @@ watch(
         :rows="2"
         :maxrows="6"
         placeholder="Typing text..."
-        class="backdrop-blur sticky bottom-0 w-full lg:w-2/3 mx-auto"
+        class="backdrop-blur shrink-0 sticky bottom-0 w-full lg:w-2/3 mx-auto"
         @keydown.ctrl.enter="sendMessage"
       >
         <button
