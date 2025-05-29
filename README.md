@@ -1,3 +1,9 @@
 # Nuxt Master
 
-My journey to learn nuxt development.
+Kevin Kwong's journey of learning Nuxt.
+
+## To-dos
+
+- UI/UX
+  - [ ] smooth scroll to bottom
+  - [ ] smooth chat response
