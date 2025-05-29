@@ -1,6 +1,8 @@
 import type { Chat } from '~/types'
 import { ref as deepRef } from 'vue'
 
+const toast = useToast()
+
 export function useChat() {
   const chat = deepRef<Chat>({
     id: '1',
@@ -28,6 +30,7 @@ export function useChat() {
     }
     catch (error) {
       console.error('error', error)
+      toast.add({ title: `${error}` })
     }
   }
 
