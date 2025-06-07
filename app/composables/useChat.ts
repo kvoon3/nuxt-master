@@ -3,6 +3,7 @@ import { ref as deepRef } from 'vue'
 
 export function useChat() {
   const toast = useToast()
+  const isTyping = shallowRef(false)
 
   const chat = deepRef<Chat>({
     id: '1',
@@ -17,6 +18,7 @@ export function useChat() {
     })
 
     try {
+      isTyping.value = true
       const text = await $fetch('/api/ai', {
         method: 'post',
         body: chat.value,
@@ -26,6 +28,7 @@ export function useChat() {
           role: 'assistant',
           content: text,
         })
+        isTyping.value = false
       }
     }
     catch (error) {
@@ -37,5 +40,6 @@ export function useChat() {
   return {
     chat,
     send,
+    isTyping,
   }
 }

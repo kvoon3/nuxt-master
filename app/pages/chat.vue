@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import markdownIt from 'markdown-it'
+import ColorModeButton from '~/components/ColorModeButton.vue'
 
 const md = markdownIt()
 
-const { chat, send } = useChat()
+const { chat, send, isTyping } = useChat()
 
 const { title } = useAppConfig()
 
@@ -53,8 +54,11 @@ function renderContent(content: string) {
 
 <template>
   <div class="h-full grid grid-rows-[min-content_1fr]">
-    <div class="leading-loose text-2xl bg-accented font-semibold text-center align-middle">
+    <div class="leading-loose text-2xl bg-accented font-semibold text-center align-middle relative">
       {{ chat.name }}
+      <div class="absolute right-4 position-y-center">
+        <ColorModeButton />
+      </div>
     </div>
     <div ref="container" class="overflow-y-auto overflow-x-hidden flex flex-col p-4 relative">
       <p
@@ -71,6 +75,9 @@ function renderContent(content: string) {
           }"
           v-html="renderContent(typeof msg.content === 'string' ? msg.content : '')"
         />
+        <span v-if="isTyping" class="-ml-1 animate-pulse">
+          &#9611;
+        </span>
       </p>
       <div class="flex-1" />
       <UTextarea

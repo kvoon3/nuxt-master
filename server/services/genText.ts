@@ -6,7 +6,7 @@ type Providers = 'open-router' | 'ollama'
 
 export async function genText(
   messages: GenerateTextOptions['messages'],
-  provider: Providers = 'open-router',
+  provider: Providers = 'ollama',
 ) {
   const options = provider === 'open-router'
     ? useOpenRouterOptions()
