@@ -1,9 +1,9 @@
 import type { Chat } from '~/types'
 import { ref as deepRef } from 'vue'
 
-const toast = useToast()
-
 export function useChat() {
+  const toast = useToast()
+
   const chat = deepRef<Chat>({
     id: '1',
     name: 'Conversation Example',
